@@ -7,6 +7,7 @@ import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
+import com.echoeight.oa.LevelOneState;
 import com.echoeight.oa.OfficeAdventures;
 
 public class Dude extends AbstractMoveableEntity {
@@ -23,15 +24,15 @@ public class Dude extends AbstractMoveableEntity {
             	GL11.glDeleteTextures(dude.getTextureID());
             	if(flip){
             		try {
-            			if(OfficeAdventures.hasgun){
+            			if(LevelOneState.hasgun){
             				String path = "res/man1.png";
-            	        	if(OfficeAdventures.currentGun == Gun.NONE){
+            	        	if(LevelOneState.currentGun == Gun.NONE){
             	        		path = "res/man1.png";
-            	        	}else if(OfficeAdventures.currentGun == Gun.PISTOL){
+            	        	}else if(LevelOneState.currentGun == Gun.PISTOL){
             	        		path = "res/gun1.png";
-            	        	}else if(OfficeAdventures.currentGun == Gun.SMG){
+            	        	}else if(LevelOneState.currentGun == Gun.SMG){
             	        		path = "res/smg2.png";
-            	        	}else if(OfficeAdventures.currentGun == Gun.GRENADE){
+            	        	}else if(LevelOneState.currentGun == Gun.GRENADE){
             	        		path = "res/gre2.png";
             	        	}
             	        	
@@ -44,15 +45,15 @@ public class Dude extends AbstractMoveableEntity {
             		}
             	}else{
             		try {
-            			if(OfficeAdventures.hasgun){
+            			if(LevelOneState.hasgun){
             				String path = "res/man1.png";
-            	        	if(OfficeAdventures.currentGun == Gun.NONE){
+            	        	if(LevelOneState.currentGun == Gun.NONE){
             	        		path = "res/man2.png";
-            	        	}else if(OfficeAdventures.currentGun == Gun.PISTOL){
+            	        	}else if(LevelOneState.currentGun == Gun.PISTOL){
             	        		path = "res/gun2.png";
-            	        	}else if(OfficeAdventures.currentGun == Gun.SMG){
+            	        	}else if(LevelOneState.currentGun == Gun.SMG){
             	        		path = "res/smg1.png";
-            	        	}else if(OfficeAdventures.currentGun == Gun.GRENADE){
+            	        	}else if(LevelOneState.currentGun == Gun.GRENADE){
             	        		path = "res/gre1.png";
             	        	}
             	        	
