@@ -14,6 +14,9 @@ public class OfficeAdventures extends StateBasedGame {
 
     	super("Office Adventures");
 
+		this.addState(new MainMenuState());
+		this.addState(new LevelOneState());
+
 		this.enterState(0);
     }
 
@@ -37,7 +40,6 @@ public class OfficeAdventures extends StateBasedGame {
 	@Override
 	public void initStatesList(GameContainer arg0) throws SlickException {
 
-		this.addState(new MainMenuState());
-		this.addState(new LevelOneState());
+		
 	}
 }
