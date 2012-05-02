@@ -13,11 +13,11 @@ public class OfficeAdventures extends StateBasedGame {
     public OfficeAdventures() {
 
     	super("Office Adventures");
+    	
+		this.addState(new LevelOneState(1));
+		this.addState(new MainMenuState(-1));
 
-		this.addState(new MainMenuState());
-		this.addState(new LevelOneState());
-
-		this.enterState(0);
+		this.enterState(-1);
     }
 
 	public static void main(String[] argv) throws SlickException {
@@ -38,8 +38,8 @@ public class OfficeAdventures extends StateBasedGame {
 	}
 
 	@Override
-	public void initStatesList(GameContainer arg0) throws SlickException {
-
-		
+	public void initStatesList(GameContainer gameContainer) throws SlickException {
+        this.getState(-1).init(gameContainer, this);
+        this.getState(1).init(gameContainer, this);
 	}
 }

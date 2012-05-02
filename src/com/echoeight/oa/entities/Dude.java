@@ -8,7 +8,6 @@ import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
 import com.echoeight.oa.LevelOneState;
-import com.echoeight.oa.OfficeAdventures;
 
 public class Dude extends AbstractMoveableEntity {
     	

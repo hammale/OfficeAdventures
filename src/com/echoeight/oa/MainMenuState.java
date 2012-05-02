@@ -6,7 +6,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
-import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
  
@@ -24,22 +24,25 @@ public class MainMenuState extends BasicGameState{
  
     Sound fx = null;
  
+    int stateID = -1;
+    
+    MainMenuState( int stateID ) 
+    {
+       this.stateID = stateID;
+    }
+ 
     @Override
     public int getID() {
-        return 0;
+        return stateID;
     }
  
-    TrueTypeFont trueTypeFont = null;
+    UnicodeFont trueTypeFont = null;
  
     public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
-
     	background = new Image("res/menu.png");
-    }
- 
- 
+    } 
  
     public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2) throws SlickException {
-
     	arg2.drawImage(background, 0, 0);
     }
  

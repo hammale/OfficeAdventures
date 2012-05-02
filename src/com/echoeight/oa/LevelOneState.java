@@ -32,7 +32,7 @@ import com.echoeight.oa.entities.TankGrenade;
 import com.echoeight.oa.entities.MoveableEntity.Gun;
 
 public class LevelOneState extends BasicGameState {
-
+	
 	private long lastFrame;
     
 	//UnicodeFont font;
@@ -102,22 +102,35 @@ public class LevelOneState extends BasicGameState {
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
-
-
+		
 		initGL(WIDTH, HEIGHT);
-		       		
-        man = new Dude(-100, HEIGHT-162, 25, 49);
-        
+		       			 
+
+	}
+
+	@Override
+	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
+			throws SlickException {
 		 if(worldname.equals("level1")){
 			 availguns.clear();
 			 LevelOne();
 			 availguns.add(Gun.PISTOL);			 
 		 }
-			Font awtFont = new Font("Times New Roman", Font.BOLD, 24);
-			//font = new UnicodeFont(awtFont, 12, false, false);		 
-		 while (!Display.isCloseRequested() && Keyboard.getEventKey() != Keyboard.KEY_ESCAPE) {
-			
-			 drawText();
+	        man = new Dude(-100, HEIGHT-162, 25, 49);
+	        
+				Font awtFont = new Font("Times New Roman", Font.BOLD, 24);
+				//font = new UnicodeFont(awtFont, 12, false, false);	
+		
+	}
+
+	@Override
+	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
+			throws SlickException {
+		 while (!Display.isCloseRequested()) {
+
+
+		
+			 //drawText();
 			 
 			 //tankLogic(man);TODO: finish tanks!
 			 
@@ -144,7 +157,9 @@ public class LevelOneState extends BasicGameState {
 			 
 			 intersects(man);
 			 hideMouse();
-			 
+			 if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
+					break;
+			 }
      	     if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
             	 for(Ladder lad : ladders){
 	        		 if(man.intersects(lad)){
@@ -424,33 +439,25 @@ public class LevelOneState extends BasicGameState {
              man.update(delta);
              for(Floor flor : floors){
             	 flor.update(getDelta());
-             }        	
+             }
              Display.update();
              Display.sync(60);
-     }
-
-     arg0.exit();
+		}
+		Display.destroy();
+		System.exit(0);
 	}
 
-	@Override
-	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
-			throws SlickException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
-			throws SlickException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public int getID() {
-
-		return 1;
-	}
+    int stateID = 1;
+    
+    LevelOneState( int stateID ) 
+    {
+       this.stateID = stateID;
+    }
+ 
+    @Override
+    public int getID() {
+        return stateID;
+    }
 
 	private void LevelOne() {
 			floors.add(new Floor(-100, HEIGHT-115, WIDTH, 8));
@@ -695,7 +702,7 @@ public class LevelOneState extends BasicGameState {
     	return tank.getLast();
 	}
 
-	private void removeEntities(){ 	
+	private void removeEntities(){
 		 for(RedBullet bul : rbullets){
 			rbulletsrem.add(bul);
 		 }
@@ -741,6 +748,7 @@ public class LevelOneState extends BasicGameState {
     	 }
     	 floorsrem.clear();
 	}
+	
 
 	/*	
 	private void tankLogic(MoveableEntity man) {
