@@ -65,9 +65,7 @@ public class LevelOneState extends BasicGameState {
     private boolean onLadder = false;
     private boolean isDead = false;
     private boolean isFalling = false;
-    
     private boolean fullscreen = false;
-    
  	public boolean manflip = false;   
     
     private double jumptop;
@@ -134,6 +132,8 @@ public class LevelOneState extends BasicGameState {
 			 
 			 //tankLogic(man);TODO: finish tanks!
 			 
+			 handleInput();
+			 
 			 if(isFalling){
 				 isFalling = false;
 			 }
@@ -157,163 +157,7 @@ public class LevelOneState extends BasicGameState {
 			 
 			 intersects(man);
 			 hideMouse();
-			 if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
-					break;
-			 }
-     	     if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
-            	 for(Ladder lad : ladders){
-	        		 if(man.intersects(lad)){
-	        			 man.setDY(0);
-	        			 man.setY(man.getY() - 1);
-	        			 if(jumping){
-	    	            	 man.setDY(0);
-	    	            	 jumping = false;
-	        			 }
-	        		 }
-            	 }
-     	     }
-     	     if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
-            	 for(Ladder lad : ladders){
-	        		 if(man.intersects(lad)){
-	        			 man.setDY(0);
-	        			 man.setY(man.getY() + 2);
-	        			 if(jumping){
-	    	            	 man.setDY(0);
-	    	            	 jumping = false;
-	        			 }
-	        		 }
-            	 }
-     	     }
-             if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-            	 if(!jumping){
-            		 man.setX(man.getX() + 4);
-            	 }else{
-            		 man.setX(man.getX() + 8);
-            	 }
-                 manflip = false;
-             }
-             if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-            	 if(!jumping){
-            		 man.setX(man.getX() - 4);
-            	 }else{
-            		 man.setX(man.getX() - 8);
-            	 }
-                 manflip = true;
-             }
-             if(currentGun == Gun.SMG){
-	             if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-	            	if (!isOnLadder(man)) {
-	            		if(hasgun){
-	            			if (smgbulletint > 10) {
-	            				smgbulletint = 0;
-	            				RedBullet bul = new RedBullet(0, 0, 8, 8);
-	            				if(manflip){
-	            					bul.setX(man.getX());
-	            				}else{
-	            					bul.setX(man.getX()+30);
-	            				}
-	            				bul.setY(man.getY() + 18);
-	            				if(manflip){
-	            					bul.setDX(-0.4);
-	            				}else{
-	            					bul.setDX(0.4);
-	            				}
-	            				rbullets.add(bul);
-	            			}
-	            			else {
-
-	            				smgbulletint++;
-	            			}
-		     	        }
-	    	        }
-	             }  
-             }             
-             while (Keyboard.next()) {
-            	 if (Keyboard.getEventKey() == Keyboard.KEY_F11) {
-	            	    if (Keyboard.getEventKeyState()) {
-	            	    	if(fullscreen){
-	            	    		fullscreen = false;
-	            	    		setDisplayMode(640, 480, false);
-	            	    	}else{
-	            	    		fullscreen = true;
-	            	    		setDisplayMode(640, 480, true);
-	            	    	}
-	            	    }
-            	 }	    
-	             if (Keyboard.getEventKey() == Keyboard.KEY_G) {
-	            	    if (Keyboard.getEventKeyState()) {
-	            	        if(hasgun){
-	            	        	if(man.getGun() == Gun.PISTOL && availguns.contains(Gun.SMG)){
-	            	        		man.setGun(Gun.SMG);
-	            	        	}else if(man.getGun() == Gun.SMG && availguns.contains(Gun.GRENADE)){
-	            	        		man.setGun(Gun.GRENADE);
-	            	        	}else{
-	            	        		man.setGun(Gun.NONE);
-	            	        		hasgun = false;
-	            	        	}
-	            	        	currentGun = man.getGun();
-	            	        }else{            	        	
-	            	        	if(man.getGun() == Gun.NONE && availguns.contains(Gun.PISTOL)){
-	            	        		hasgun = true;
-	            	        		man.setGun(Gun.GRENADE);//TODO SET TO PISTOL
-	            	        		currentGun = man.getGun();
-	            	        	}
-	            	        }
-	            	    }
-	             }
-	             if(currentGun == Gun.PISTOL || currentGun == Gun.GRENADE){
-		             if (Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
-		            	    if (Keyboard.getEventKeyState()) {
-            	        		if (!isOnLadder(man)) {
-            	        			if(hasgun){
-            	        				if(currentGun == Gun.PISTOL){
-            	        					RedBullet bul = new RedBullet(0, 0, 8, 8);
-		            	        			if(manflip){
-		            	        				bul.setX(man.getX());
-		            	        			}else{
-		            	        				bul.setX(man.getX()+30);
-		            	        			}
-		            	        			bul.setY(man.getY() + 18);
-		            	        			if(manflip){
-		            	        				bul.setDX(-0.4);
-		            	        			}else{
-		            	        				bul.setDX(0.4);
-		            	        			}
-		            	        			rbullets.add(bul);
-            	        				}else if(currentGun == Gun.GRENADE){
-            	        					if (rgrenades.size() < 1) {
-            	        						RedGrenade gre = new RedGrenade(man.getY() + 13, 0, 0, 8, 8);
-            	        						if(manflip){
-            	        							gre.setX(man.getX());
-            	        						}else{
-            	        							gre.setX(man.getX()+30);
-            	        						}
-            	        						gre.setY(man.getY() + 13);
-            	        						if(manflip){
-            	        							gre.setDX(-0.2);
-            	        						}else{
-            	        							gre.setDX(0.2);
-            	        						}
-            	        						gre.setDY(-0.3);
-            	        						rgrenades.add(gre);	
-            	        					}
-            	        				}
-		            	        	}
-		            	        }
-		            	    }
-		             }
-	             }	             
-	             if (Keyboard.getEventKey() == Keyboard.KEY_UP) {
-	            	 if(!(jumping) && !(onLadder) && !(isFalling)){
-	            	    if (Keyboard.getEventKeyState()) {
-		            	 	jumping = true;
-		            	    jumptop =  man.getY()-60;
-		            	    jumpinitial = man.getY();
-	            	    	man.setDY(-0.4);
-	            	    }
-	            	 }
-	             }
-             }
+			
              if(isFalling && !(jumping) && !(onLadder)){
             	 man.setY(man.getY() + 8);
              }
@@ -443,11 +287,16 @@ public class LevelOneState extends BasicGameState {
              Display.update();
              Display.sync(60);
 		}
-		Display.destroy();
-		System.exit(0);
+		 destroyDisplay();
 	}
 
-    int stateID = 1;
+    private void destroyDisplay() {
+		Display.destroy();
+		System.exit(0);		
+	}
+
+
+	int stateID = 1;
     
     LevelOneState( int stateID ) 
     {
@@ -798,4 +647,165 @@ public class LevelOneState extends BasicGameState {
 		}
 	}
 */
+	
+	public void handleInput() {
+		 if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
+				destroyDisplay();
+		 }
+	     if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
+     	 for(Ladder lad : ladders){
+     		 if(man.intersects(lad)){
+     			 man.setDY(0);
+     			 man.setY(man.getY() - 1);
+     			 if(jumping){
+ 	            	 man.setDY(0);
+ 	            	 jumping = false;
+     			 }
+     		 }
+     	 }
+	     }
+	     if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
+     	 for(Ladder lad : ladders){
+     		 if(man.intersects(lad)){
+     			 man.setDY(0);
+     			 man.setY(man.getY() + 2);
+     			 if(jumping){
+ 	            	 man.setDY(0);
+ 	            	 jumping = false;
+     			 }
+     		 }
+     	 }
+	     }
+      if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
+     	 if(!jumping){
+     		 man.setX(man.getX() + 4);
+     	 }else{
+     		 man.setX(man.getX() + 8);
+     	 }
+          manflip = false;
+      }
+      if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+     	 if(!jumping){
+     		 man.setX(man.getX() - 4);
+     	 }else{
+     		 man.setX(man.getX() - 8);
+     	 }
+          manflip = true;
+      }
+      if(currentGun == Gun.SMG){
+          if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+         	if (!isOnLadder(man)) {
+         		if(hasgun){
+         			if (smgbulletint > 10) {
+         				smgbulletint = 0;
+         				RedBullet bul = new RedBullet(0, 0, 8, 8);
+         				if(manflip){
+         					bul.setX(man.getX());
+         				}else{
+         					bul.setX(man.getX()+30);
+         				}
+         				bul.setY(man.getY() + 18);
+         				if(manflip){
+         					bul.setDX(-0.4);
+         				}else{
+         					bul.setDX(0.4);
+         				}
+         				rbullets.add(bul);
+         			}
+         			else {
+
+         				smgbulletint++;
+         			}
+	     	        }
+ 	        }
+          }  
+      }             
+      while (Keyboard.next()) {
+     	 if (Keyboard.getEventKey() == Keyboard.KEY_F11) {
+         	    if (Keyboard.getEventKeyState()) {
+         	    	if(fullscreen){
+         	    		fullscreen = false;
+         	    		setDisplayMode(640, 480, false);
+         	    	}else{
+         	    		fullscreen = true;
+         	    		setDisplayMode(640, 480, true);
+         	    	}
+         	    }
+     	 }	    
+          if (Keyboard.getEventKey() == Keyboard.KEY_G) {
+         	    if (Keyboard.getEventKeyState()) {
+         	        if(hasgun){
+         	        	if(man.getGun() == Gun.PISTOL && availguns.contains(Gun.SMG)){
+         	        		man.setGun(Gun.SMG);
+         	        	}else if(man.getGun() == Gun.SMG && availguns.contains(Gun.GRENADE)){
+         	        		man.setGun(Gun.GRENADE);
+         	        	}else{
+         	        		man.setGun(Gun.NONE);
+         	        		hasgun = false;
+         	        	}
+         	        	currentGun = man.getGun();
+         	        }else{            	        	
+         	        	if(man.getGun() == Gun.NONE && availguns.contains(Gun.PISTOL)){
+         	        		hasgun = true;
+         	        		man.setGun(Gun.GRENADE);//TODO SET TO PISTOL
+         	        		currentGun = man.getGun();
+         	        	}
+         	        }
+         	    }
+          }
+          if(currentGun == Gun.PISTOL || currentGun == Gun.GRENADE){
+	             if (Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
+	            	    if (Keyboard.getEventKeyState()) {
+     	        		if (!isOnLadder(man)) {
+     	        			if(hasgun){
+     	        				if(currentGun == Gun.PISTOL){
+     	        					RedBullet bul = new RedBullet(0, 0, 8, 8);
+	            	        			if(manflip){
+	            	        				bul.setX(man.getX());
+	            	        			}else{
+	            	        				bul.setX(man.getX()+30);
+	            	        			}
+	            	        			bul.setY(man.getY() + 18);
+	            	        			if(manflip){
+	            	        				bul.setDX(-0.4);
+	            	        			}else{
+	            	        				bul.setDX(0.4);
+	            	        			}
+	            	        			rbullets.add(bul);
+     	        				}else if(currentGun == Gun.GRENADE){
+     	        					if (rgrenades.size() < 1) {
+     	        						RedGrenade gre = new RedGrenade(man.getY() + 13, 0, 0, 8, 8);
+     	        						if(manflip){
+     	        							gre.setX(man.getX());
+     	        						}else{
+     	        							gre.setX(man.getX()+30);
+     	        						}
+     	        						gre.setY(man.getY() + 13);
+     	        						if(manflip){
+     	        							gre.setDX(-0.2);
+     	        						}else{
+     	        							gre.setDX(0.2);
+     	        						}
+     	        						gre.setDY(-0.3);
+     	        						rgrenades.add(gre);	
+     	        					}
+     	        				}
+	            	        	}
+	            	        }
+	            	    }
+	             }
+          }	             
+          if (Keyboard.getEventKey() == Keyboard.KEY_UP) {
+         	 if(!(jumping) && !(onLadder) && !(isFalling)){
+         	    if (Keyboard.getEventKeyState()) {
+	            	 	jumping = true;
+	            	    jumptop =  man.getY()-60;
+	            	    jumpinitial = man.getY();
+         	    	man.setDY(-0.4);
+         	    }
+         	 }
+          }
+      }
+	}
+	
 }
