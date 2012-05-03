@@ -13,10 +13,13 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.UnicodeFont;
+import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -36,6 +39,10 @@ public class LevelOneState extends BasicGameState {
 	private long lastFrame;
     
 	//UnicodeFont font;
+	
+	Image background = null;
+	
+	UnicodeFont font;
 	
 	public static boolean hasgun = false;
 	public static Gun currentGun;
@@ -60,6 +67,8 @@ public class LevelOneState extends BasicGameState {
 	
 	public ArrayList<TankGrenade> tbullet = new ArrayList<TankGrenade>();
 	public ArrayList<TankGrenade> tbulletrem = new ArrayList<TankGrenade>();
+	
+	ColorEffect colorEffect;
 	
     private boolean jumping = false;
     private boolean onLadder = false;
@@ -100,12 +109,11 @@ public class LevelOneState extends BasicGameState {
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
-		
-		initGL(WIDTH, HEIGHT);
-		       			 
+		initGL(WIDTH, HEIGHT);       			 
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 			throws SlickException {
@@ -117,19 +125,23 @@ public class LevelOneState extends BasicGameState {
 	        man = new Dude(-100, HEIGHT-162, 25, 49);
 	        
 				Font awtFont = new Font("Times New Roman", Font.BOLD, 24);
-				//font = new UnicodeFont(awtFont, 12, false, false);	
+				
+		try {
+			   font = new UnicodeFont(awtFont, 12, false, false);
+			   colorEffect = new ColorEffect();
+			   font.getEffects().add(colorEffect);
+			   font.addAsciiGlyphs();
+			   font.loadGlyphs();
+		} catch (SlickException e) {
+			   e.printStackTrace();
+		}
 		
 	}
 
 	@Override
 	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 			throws SlickException {
-		 while (!Display.isCloseRequested()) {
-
-
-		
-			 //drawText();
-			 
+		 while (!Display.isCloseRequested()) {			 
 			 //tankLogic(man);TODO: finish tanks!
 			 
 			 handleInput();
@@ -284,6 +296,7 @@ public class LevelOneState extends BasicGameState {
              for(Floor flor : floors){
             	 flor.update(getDelta());
              }
+             drawText();
              Display.update();
              Display.sync(60);
 		}
@@ -345,28 +358,13 @@ public class LevelOneState extends BasicGameState {
 		GL11.glOrtho(0, width, height, 0, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		
-//		GL11.glEnable(GL11.GL_TEXTURE_2D);               
-//        
-//		GL11.glClearColor(255f, 255f, 255f, 0.0f);
-//        
-//        	// enable alpha blending
-//        	GL11.glEnable(GL11.GL_BLEND);
-//        	GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-//        
-//        	GL11.glViewport(0,0,width,height);
-//		GL11.glMatrixMode(GL11.GL_MODELVIEW);
-//
-//		GL11.glMatrixMode(GL11.GL_PROJECTION);
-//		GL11.glLoadIdentity();
-//		GL11.glOrtho(0, width, height, 0, 1, -1);
-//		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		
 		
 		
 	}
 
 	private void drawText() {
-		//font.drawString(100, 50, "THE LIGHTWEIGHT JAVA GAMES LIBRARY");
+		font.drawString(100, 100, "Some text", Color.blue);
 	}
 
 	private void reset(){
