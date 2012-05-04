@@ -1,5 +1,6 @@
 package com.echoeight.oa;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -9,6 +10,8 @@ import org.newdawn.slick.Sound;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
+import com.echoeight.oa.util.Fullscreen;
  
 public class MainMenuState extends BasicGameState{
  
@@ -47,7 +50,19 @@ public class MainMenuState extends BasicGameState{
 
     	int mx = Mouse.getX();
     	int my = Mouse.getY();
-
+    	
+    	 if (Keyboard.isKeyDown(Keyboard.KEY_F11)) {
+      	    if (Keyboard.getEventKeyState()) {
+      	    	if(Fullscreen.fullscreen){
+      	    		Fullscreen.fullscreen = false;
+      	    		Fullscreen.setDisplayMode(640, 480, false);
+      	    	}else{
+      	    		Fullscreen.fullscreen = true;
+      	    		Fullscreen.setDisplayMode(640, 480, true);
+      	    	}
+      	    }
+  	 }  
+    	  	
     	if (Mouse.isButtonDown(0)) {
 
 //    		System.out.println(mx);

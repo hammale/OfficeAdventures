@@ -8,12 +8,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -38,6 +36,7 @@ import com.echoeight.oa.entities.RedGrenade;
 import com.echoeight.oa.entities.Tank;
 import com.echoeight.oa.entities.TankGrenade;
 import com.echoeight.oa.entities.MoveableEntity.Gun;
+import com.echoeight.oa.util.Fullscreen;
 
 public class LevelOneState extends BasicGameState {
 	
@@ -64,6 +63,8 @@ public class LevelOneState extends BasicGameState {
 	public ArrayList<Tank> tanks = new ArrayList<Tank>();
 	public ArrayList<Tank> tanksrem = new ArrayList<Tank>();
 	
+	private int smgammo;
+	
 	public ArrayList<Mine> mines = new ArrayList<Mine>();
 	public ArrayList<Mine> minesrem = new ArrayList<Mine>();
 	
@@ -81,7 +82,6 @@ public class LevelOneState extends BasicGameState {
     private boolean onLadder = false;
     private boolean isDead = false;
     private boolean isFalling = false;
-    private boolean fullscreen = false;
  	public boolean manflip = false;   
     
     private double jumptop;
@@ -317,7 +317,7 @@ public class LevelOneState extends BasicGameState {
             	 flor.update(getDelta());
              }
             // drawBackground();
-             drawText();
+             drawAmmo();
              Display.update();
              Display.sync(60);
 		}
@@ -343,6 +343,9 @@ public class LevelOneState extends BasicGameState {
     }
 
 	private void LevelOne() {
+			
+			smgammo = 100;
+			
 			floors.add(new Floor(-100, HEIGHT-115, WIDTH, 8));
 	        floors.add(new Floor(-100, HEIGHT-240, 292, 8));
 	        floors.add(new Floor(230, HEIGHT-150, 350, 8));
@@ -384,9 +387,9 @@ public class LevelOneState extends BasicGameState {
 		
 	}
 
-	private void drawText() {
+	private void drawAmmo() {
 		Color.white.bind();
-		font.drawString(100, 100, "Some text", Color.black);
+		font.drawString(100, 100, "Ammo: " + smgammo, Color.black);
 	}
 
 	private void reset(){
@@ -457,57 +460,6 @@ public class LevelOneState extends BasicGameState {
 			}
 		}
 		return false;
-	}
-
-    //fullscreen stuff
-	public void setDisplayMode(int width, int height, boolean fullscreen) {
-
-	    if ((Display.getDisplayMode().getWidth() == width) && 
-	        (Display.getDisplayMode().getHeight() == height) && 
-		(Display.isFullscreen() == fullscreen)) {
-		    return;
-	    }
-
-	    try {
-	        DisplayMode targetDisplayMode = null;
-			
-		if (fullscreen) {
-		    DisplayMode[] modes = Display.getAvailableDisplayModes();
-		    int freq = 0;
-					
-		    for (int i=0;i<modes.length;i++) {
-		        DisplayMode current = modes[i];
-						
-			if ((current.getWidth() == width) && (current.getHeight() == height)) {
-			    if ((targetDisplayMode == null) || (current.getFrequency() >= freq)) {
-			        if ((targetDisplayMode == null) || (current.getBitsPerPixel() > targetDisplayMode.getBitsPerPixel())) {
-				    targetDisplayMode = current;
-				    freq = targetDisplayMode.getFrequency();
-	                        }
-	                    }
-
-			    if ((current.getBitsPerPixel() == Display.getDesktopDisplayMode().getBitsPerPixel()) &&
-	                        (current.getFrequency() == Display.getDesktopDisplayMode().getFrequency())) {
-	                            targetDisplayMode = current;
-	                            break;
-	                    }
-	                }
-	            }
-	        } else {
-	            targetDisplayMode = new DisplayMode(width,height);
-	        }
-
-	        if (targetDisplayMode == null) {
-	            System.out.println("Failed to find value mode: "+width+"x"+height+" fs="+fullscreen);
-	            return;
-	        }
-
-	        Display.setDisplayMode(targetDisplayMode);
-	        Display.setFullscreen(fullscreen);
-				
-	    } catch (LWJGLException e) {
-	        System.out.println("Unable to setup mode "+width+"x"+height+" fullscreen="+fullscreen + e);
-	    }
 	}
 
 	public void cleanUpEntities(){
@@ -715,8 +667,9 @@ public class LevelOneState extends BasicGameState {
       if(currentGun == Gun.SMG){
           if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
          	if (!isOnLadder(man)) {
-         		if(hasgun){
+         		if(hasgun && smgammo > 0){
          			if (smgbulletint > 10) {
+     					smgammo = smgammo - 1;
          				smgbulletint = 0;
          				RedBullet bul = new RedBullet(0, 0, 8, 8);
          				if(manflip){
@@ -733,25 +686,24 @@ public class LevelOneState extends BasicGameState {
          				rbullets.add(bul);
          			}
          			else {
-
          				smgbulletint++;
          			}
-	     	        }
+	     	    }
  	        }
           }  
       }             
       while (Keyboard.next()) {
      	 if (Keyboard.getEventKey() == Keyboard.KEY_F11) {
          	    if (Keyboard.getEventKeyState()) {
-         	    	if(fullscreen){
-         	    		fullscreen = false;
-         	    		setDisplayMode(640, 480, false);
+         	    	if(Fullscreen.fullscreen){
+         	    		Fullscreen.fullscreen = false;
+         	    		Fullscreen.setDisplayMode(640, 480, false);
          	    	}else{
-         	    		fullscreen = true;
-         	    		setDisplayMode(640, 480, true);
+         	    		Fullscreen.fullscreen = true;
+         	    		Fullscreen.setDisplayMode(640, 480, true);
          	    	}
          	    }
-     	 }	    
+     	 }  
           if (Keyboard.getEventKey() == Keyboard.KEY_G) {
          	    if (Keyboard.getEventKeyState()) {
          	        if(hasgun){
@@ -767,7 +719,7 @@ public class LevelOneState extends BasicGameState {
          	        }else{            	        	
          	        	if(man.getGun() == Gun.NONE && availguns.contains(Gun.PISTOL)){
          	        		hasgun = true;
-         	        		man.setGun(Gun.GRENADE);//TODO SET TO PISTOL
+         	        		man.setGun(Gun.SMG);//TODO chnage guns here
          	        		currentGun = man.getGun();
          	        	}
          	        }
