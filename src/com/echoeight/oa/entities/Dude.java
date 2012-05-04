@@ -19,6 +19,8 @@ public class Dude extends AbstractMoveableEntity {
 
             @Override
             public void draw(boolean flip) {
+            	
+
             	if(dude != null)
             	GL11.glDeleteTextures(dude.getTextureID());
             	if(flip){

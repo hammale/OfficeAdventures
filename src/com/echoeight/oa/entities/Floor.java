@@ -28,13 +28,13 @@ public class Floor extends AbstractEntity {
             GL11.glLoadIdentity();
             GL11.glTranslated(x, y, 0);
         	GL11.glBegin(GL11.GL_QUADS);
-    			//GL11.glTexCoord2f(0,0);
+    			GL11.glTexCoord2f(0,0);
     			GL11.glVertex2f(100,100);
-    			//GL11.glTexCoord2f(1,0);
+    			GL11.glTexCoord2f(1,0);
     			GL11.glVertex2d(getWidth()+100,100);
-    			//GL11.glTexCoord2f(1,1);
+    			GL11.glTexCoord2f(1,1);
     			GL11.glVertex2d(getWidth()+100,100+floor.getImageHeight());
-    			//GL11.glTexCoord2f(0,1);
+    			GL11.glTexCoord2f(0,1);
     			GL11.glVertex2f(100,100+floor.getImageHeight());
     		GL11.glEnd();
     		 GL11.glLoadIdentity();

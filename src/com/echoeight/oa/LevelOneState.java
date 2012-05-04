@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.glClear;
 
 import java.awt.Font;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import org.lwjgl.LWJGLException;
@@ -131,14 +132,27 @@ public class LevelOneState extends BasicGameState {
 	        man = new Dude(-100, HEIGHT-162, 25, 49);
 	        
 				Font awtFont = new Font("Arial", Font.BOLD, 24);
+//				try {
+//					InputStream inputStream	= ResourceLoader.getResourceAsStream("res/font.ttf");	 
+//					awtFont = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+//					font = new UnicodeFont(awtFont, 24, false, false);
+//					colorEffect = new ColorEffect();
+//					   font.getEffects().add(colorEffect);
+//					   font.addAsciiGlyphs();
+//					   font.loadGlyphs();
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
 				
 		try {
-			   font = new UnicodeFont(awtFont, 12, false, false);
+			InputStream inputStream	= ResourceLoader.getResourceAsStream("res/font.ttf");	 
+			awtFont = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+			font = new UnicodeFont(awtFont, 24, false, false);
 			   colorEffect = new ColorEffect();
 			   font.getEffects().add(colorEffect);
 			   font.addAsciiGlyphs();
 			   font.loadGlyphs();
-		} catch (SlickException e) {
+		} catch (Exception e) {
 			   e.printStackTrace();
 		}
 		
@@ -147,9 +161,9 @@ public class LevelOneState extends BasicGameState {
 	@Override
 	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 			throws SlickException {
-		 while (!Display.isCloseRequested()) {			 
+		 while (!Display.isCloseRequested()) {	
+			 Color.white.bind();
 			 //tankLogic(man);TODO: finish tanks!
-			 
 			 handleInput();
 			 
 			 if(isFalling){
@@ -302,7 +316,7 @@ public class LevelOneState extends BasicGameState {
              for(Floor flor : floors){
             	 flor.update(getDelta());
              }
-             drawBackground();
+            // drawBackground();
              drawText();
              Display.update();
              Display.sync(60);
@@ -371,7 +385,8 @@ public class LevelOneState extends BasicGameState {
 	}
 
 	private void drawText() {
-		font.drawString(100, 100, "Some text", Color.blue);
+		Color.white.bind();
+		font.drawString(100, 100, "Some text", Color.black);
 	}
 
 	private void reset(){
