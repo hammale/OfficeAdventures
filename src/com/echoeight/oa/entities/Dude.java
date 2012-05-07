@@ -1,17 +1,18 @@
 package com.echoeight.oa.entities;
 
-import java.io.IOException;
-
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureLoader;
-import org.newdawn.slick.util.ResourceLoader;
 
-import com.echoeight.oa.LevelOneState;
+import com.echoeight.oa.images.LoadTextures;
 
 public class Dude extends AbstractMoveableEntity {
     	
-		Texture dude;
+	Texture dude;
+	
+	public static boolean manflip;
+	public static boolean hasgun; 
+	
+	public static Gun currentGun = Gun.NONE;
 	
             public Dude(double x, double y, double width, double height) {
                 super(x, y, width, height, Gun.NONE);
@@ -20,53 +21,20 @@ public class Dude extends AbstractMoveableEntity {
             @Override
             public void draw(boolean flip) {
             	
-
-            	if(dude != null)
-            	GL11.glDeleteTextures(dude.getTextureID());
-            	if(flip){
-            		try {
-            			if(LevelOneState.hasgun){
-            				String path = "res/man1.png";
-            	        	if(LevelOneState.currentGun == Gun.NONE){
-            	        		path = "res/man1.png";
-            	        	}else if(LevelOneState.currentGun == Gun.PISTOL){
-            	        		path = "res/gun1.png";
-            	        	}else if(LevelOneState.currentGun == Gun.SMG){
-            	        		path = "res/smg2.png";
-            	        	}else if(LevelOneState.currentGun == Gun.GRENADE){
-            	        		path = "res/gre2.png";
-            	        	}
-            	        	
-            				dude = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(path));
-            			}else{
-            				dude = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/man1.png"));
-            			}
-            		} catch (IOException e) {
-            			e.printStackTrace();
-            		}
+            	if(hasgun){
+            	       	if(currentGun == Gun.NONE){
+            	       		dude = LoadTextures.getDude(manflip, Gun.NONE);
+            	       	}else if(currentGun == Gun.PISTOL){
+            	       		dude = LoadTextures.getDude(manflip, Gun.PISTOL);
+            	       	}else if(currentGun == Gun.SMG){
+            	       		dude = LoadTextures.getDude(manflip, Gun.SMG);
+            	       	}else if(currentGun == Gun.GRENADE){
+            	       		dude = LoadTextures.getDude(manflip, Gun.GRENADE);
+            	       	}
             	}else{
-            		try {
-            			if(LevelOneState.hasgun){
-            				String path = "res/man1.png";
-            	        	if(LevelOneState.currentGun == Gun.NONE){
-            	        		path = "res/man2.png";
-            	        	}else if(LevelOneState.currentGun == Gun.PISTOL){
-            	        		path = "res/gun2.png";
-            	        	}else if(LevelOneState.currentGun == Gun.SMG){
-            	        		path = "res/smg1.png";
-            	        	}else if(LevelOneState.currentGun == Gun.GRENADE){
-            	        		path = "res/gre1.png";
-            	        	}
-            	        	
-            				
-            				dude = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(path));
-            			}else{
-            				dude = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/man2.png"));
-            			}
-            		} catch (IOException e) {
-            			e.printStackTrace();
-            		}
-            	}
+            	    dude = LoadTextures.getDude(manflip, Gun.NONE);
+            	} 
+            	
                 dude.bind();
                 GL11.glLoadIdentity();
                 GL11.glTranslated(x, y, 0);

@@ -1,15 +1,13 @@
 package com.echoeight.oa.entities;
 
-import java.io.IOException;
-
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureLoader;
-import org.newdawn.slick.util.ResourceLoader;
+
+import com.echoeight.oa.images.LoadTextures;
 
 public class Ladder extends AbstractEntity {
 
-		Texture ladder;
+		Texture ladder = LoadTextures.getLadder();
 	
         public Ladder(double x, double y, double width, double height) {
             super(x, y, width, height);
@@ -17,13 +15,7 @@ public class Ladder extends AbstractEntity {
 
         @Override
         public void draw(boolean flip) {
-        	try {
-        		if(ladder != null)
-        		GL11.glDeleteTextures(ladder.getTextureID());
-        		ladder = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/ladder.png"));
-        	} catch (IOException e) {
-        		e.printStackTrace();
-        	}
+        	
             ladder.bind();
             GL11.glLoadIdentity();
             GL11.glTranslated(x, y, 0);

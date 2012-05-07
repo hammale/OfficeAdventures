@@ -36,6 +36,7 @@ import com.echoeight.oa.entities.RedGrenade;
 import com.echoeight.oa.entities.Tank;
 import com.echoeight.oa.entities.TankGrenade;
 import com.echoeight.oa.entities.MoveableEntity.Gun;
+import com.echoeight.oa.images.LoadTextures;
 import com.echoeight.oa.util.Fullscreen;
 
 public class LevelOneState extends BasicGameState {
@@ -49,9 +50,6 @@ public class LevelOneState extends BasicGameState {
 	UnicodeFont font;
 	
 	Texture bg;
-	
-	public static boolean hasgun = false;
-	public static Gun currentGun;
 	
 	public ArrayList<RedBullet> rbullets = new ArrayList<RedBullet>();
 	public ArrayList<RedGrenade> rgrenades = new ArrayList<RedGrenade>();
@@ -81,8 +79,7 @@ public class LevelOneState extends BasicGameState {
     private boolean jumping = false;
     private boolean onLadder = false;
     private boolean isDead = false;
-    private boolean isFalling = false;
- 	public boolean manflip = false;   
+    private boolean isFalling = false; 
     
     private double jumptop;
     private double jumpinitial;
@@ -114,10 +111,9 @@ public class LevelOneState extends BasicGameState {
  	private int smgbulletint = 0;
 
 	@Override
-	public void init(GameContainer arg0, StateBasedGame arg1)
-			throws SlickException {
-		initGL(WIDTH, HEIGHT);       			 
-
+	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
+		initGL(WIDTH, HEIGHT);  			 
+		LoadTextures.LoadAll();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -199,7 +195,7 @@ public class LevelOneState extends BasicGameState {
              //TODO: tweak grenades
              for(RedGrenade gre : rgrenades){
             	 if(gre.getY() <= gre.getInitialY() - 50){
-            		 if(manflip){
+            		 if(Dude.manflip){
             			 gre.setDX(-0.5);
             		 }else{
             			 gre.setDX(0.5);
@@ -282,7 +278,7 @@ public class LevelOneState extends BasicGameState {
               	lad.draw(false);
              }
              
-             man.draw(manflip);
+             man.draw(Dude.manflip);
 
              for(RedBullet bul : rbullets){
             	 bul.draw(false);
@@ -423,7 +419,7 @@ public class LevelOneState extends BasicGameState {
 				isFalling = false;
 			}
 			 if(man.intersects(flor) && !man.onFloor(man,flor)){
-				 if(manflip){
+				 if(Dude.manflip){
 					 man.setX(man.getX() + 4);
 				 }else{
 					 man.setX(man.getX() - 4);
@@ -654,7 +650,7 @@ public class LevelOneState extends BasicGameState {
      	 }else{
      		 man.setX(man.getX() + 8);
      	 }
-          manflip = false;
+          Dude.manflip = false;
       }
       if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
      	 if(!jumping){
@@ -662,23 +658,23 @@ public class LevelOneState extends BasicGameState {
      	 }else{
      		 man.setX(man.getX() - 8);
      	 }
-          manflip = true;
+          Dude.manflip = true;
       }
-      if(currentGun == Gun.SMG){
+      if(Dude.currentGun == Gun.SMG){
           if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
          	if (!isOnLadder(man)) {
-         		if(hasgun && smgammo > 0){
+         		if(Dude.hasgun && smgammo > 0){
          			if (smgbulletint > 10) {
      					smgammo = smgammo - 1;
          				smgbulletint = 0;
          				RedBullet bul = new RedBullet(0, 0, 8, 8);
-         				if(manflip){
+         				if(Dude.manflip){
          					bul.setX(man.getX());
          				}else{
          					bul.setX(man.getX()+30);
          				}
          				bul.setY(man.getY() + 18);
-         				if(manflip){
+         				if(Dude.manflip){
          					bul.setDX(-0.4);
          				}else{
          					bul.setDX(0.4);
@@ -706,54 +702,54 @@ public class LevelOneState extends BasicGameState {
      	 }  
           if (Keyboard.getEventKey() == Keyboard.KEY_G) {
          	    if (Keyboard.getEventKeyState()) {
-         	        if(hasgun){
+         	        if(Dude.hasgun){
          	        	if(man.getGun() == Gun.PISTOL && availguns.contains(Gun.SMG)){
          	        		man.setGun(Gun.SMG);
          	        	}else if(man.getGun() == Gun.SMG && availguns.contains(Gun.GRENADE)){
          	        		man.setGun(Gun.GRENADE);
          	        	}else{
          	        		man.setGun(Gun.NONE);
-         	        		hasgun = false;
+         	        		Dude.hasgun = false;
          	        	}
-         	        	currentGun = man.getGun();
+         	        	Dude.currentGun = man.getGun();
          	        }else{            	        	
          	        	if(man.getGun() == Gun.NONE && availguns.contains(Gun.PISTOL)){
-         	        		hasgun = true;
+         	        		Dude.hasgun = true;
          	        		man.setGun(Gun.SMG);//TODO chnage guns here
-         	        		currentGun = man.getGun();
+         	        		Dude.currentGun = man.getGun();
          	        	}
          	        }
          	    }
           }
-          if(currentGun == Gun.PISTOL || currentGun == Gun.GRENADE){
+          if(Dude.currentGun == Gun.PISTOL || Dude.currentGun == Gun.GRENADE){
 	             if (Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
 	            	    if (Keyboard.getEventKeyState()) {
      	        		if (!isOnLadder(man)) {
-     	        			if(hasgun){
-     	        				if(currentGun == Gun.PISTOL){
+     	        			if(Dude.hasgun){
+     	        				if(Dude.currentGun == Gun.PISTOL){
      	        					RedBullet bul = new RedBullet(0, 0, 8, 8);
-	            	        			if(manflip){
+	            	        			if(Dude.manflip){
 	            	        				bul.setX(man.getX());
 	            	        			}else{
 	            	        				bul.setX(man.getX()+30);
 	            	        			}
 	            	        			bul.setY(man.getY() + 18);
-	            	        			if(manflip){
+	            	        			if(Dude.manflip){
 	            	        				bul.setDX(-0.4);
 	            	        			}else{
 	            	        				bul.setDX(0.4);
 	            	        			}
 	            	        			rbullets.add(bul);
-     	        				}else if(currentGun == Gun.GRENADE){
+     	        				}else if(Dude.currentGun == Gun.GRENADE){
      	        					if (rgrenades.size() < 1) {
      	        						RedGrenade gre = new RedGrenade(man.getY() + 13, 0, 0, 8, 8);
-     	        						if(manflip){
+     	        						if(Dude.manflip){
      	        							gre.setX(man.getX());
      	        						}else{
      	        							gre.setX(man.getX()+30);
      	        						}
      	        						gre.setY(man.getY() + 13);
-     	        						if(manflip){
+     	        						if(Dude.manflip){
      	        							gre.setDX(-0.2);
      	        						}else{
      	        							gre.setDX(0.2);

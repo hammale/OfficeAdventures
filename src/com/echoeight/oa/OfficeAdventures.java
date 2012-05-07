@@ -26,11 +26,10 @@ public class OfficeAdventures extends StateBasedGame {
 
         for (String s: argv) {
     		if (s.equalsIgnoreCase("fullscreen")) {
-
     			fullscreen = true;
     		}
         }
-
+               
         AppGameContainer app = new AppGameContainer(new OfficeAdventures());
 
         app.setDisplayMode(WIDTH, HEIGHT, fullscreen);
