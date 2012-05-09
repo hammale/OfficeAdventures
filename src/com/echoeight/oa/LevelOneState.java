@@ -664,9 +664,9 @@ public class LevelOneState extends BasicGameState {
           if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
          	if (!isOnLadder(man)) {
          		if(Dude.hasgun && smgammo > 0){
-         			if (smgbulletint > 10) {
+         			if (smgbulletint == 0) {
      					smgammo = smgammo - 1;
-         				smgbulletint = 0;
+         				smgbulletint = 10;
          				RedBullet bul = new RedBullet(0, 0, 8, 8);
          				if(Dude.manflip){
          					bul.setX(man.getX());
@@ -682,7 +682,7 @@ public class LevelOneState extends BasicGameState {
          				rbullets.add(bul);
          			}
          			else {
-         				smgbulletint++;
+         				smgbulletint = smgbulletint-1;
          			}
 	     	    }
  	        }
