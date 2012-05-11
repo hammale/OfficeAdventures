@@ -346,11 +346,11 @@ public class LevelOneState extends BasicGameState {
 	        floors.add(new Floor(-100, HEIGHT-240, 292, 8));
 	        floors.add(new Floor(230, HEIGHT-150, 350, 8));
 	        
-	        ladders.add(new Ladder(200, HEIGHT-144, 22, 30));
-	        ladders.add(new Ladder(200, HEIGHT-172, 22, 30));
-	        ladders.add(new Ladder(200, HEIGHT-200, 22, 30));
-	        ladders.add(new Ladder(200, HEIGHT-228, 22, 30));
-	        ladders.add(new Ladder(200, HEIGHT-256, 22, 30));
+	        ladders.add(new Ladder(500, HEIGHT-144, 22, 30));
+	        ladders.add(new Ladder(500, HEIGHT-172, 22, 30));
+	        ladders.add(new Ladder(500, HEIGHT-200, 22, 30));
+	        ladders.add(new Ladder(500, HEIGHT-228, 22, 30));
+	        ladders.add(new Ladder(500, HEIGHT-256, 22, 30));
 	        
 	        mines.add(new Mine(10, HEIGHT-137, 24, 23));
 	        
@@ -417,6 +417,9 @@ public class LevelOneState extends BasicGameState {
 		 for(Floor flor : floors){
 			if(man.onFloor(man,flor)){
 				isFalling = false;
+			}
+			if(!man.onFloor(man,flor)){
+				System.out.println("ON FLOOR!");
 			}
 			 if(man.intersects(flor) && !man.onFloor(man,flor)){
 				 if(Dude.manflip){
