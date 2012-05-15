@@ -418,15 +418,19 @@ public class LevelOneState extends BasicGameState {
 			if(man.onFloor(man,flor)){
 				isFalling = false;
 			}
-			if(!man.onFloor(man,flor)){
-				System.out.println("ON FLOOR!");
-			}
-			 if(man.intersects(flor) && !man.onFloor(man,flor)){
+		 }	
+		 for(Floor flor : floors){
+			if(man.intersects(flor) && !man.onFloor(man,flor) && !isFalling){
 				 if(Dude.manflip){
 					 man.setX(man.getX() + 4);
 				 }else{
 					 man.setX(man.getX() - 4);
 				 }
+			 }else if(man.intersects(flor) && isFalling){
+				 man.setY(man.getY()-8);
+				 man.setDY(0);
+				 jumping = false;
+				 isFalling = false;
 			 }
 			 for(RedBullet bul : rbullets){
 				 if(bul.intersects(flor)){
