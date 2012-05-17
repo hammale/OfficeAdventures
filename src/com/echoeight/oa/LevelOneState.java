@@ -48,6 +48,7 @@ public class LevelOneState extends BasicGameState {
 	Image background = null;
 	
 	UnicodeFont font;
+	UnicodeFont smallfont;
 	
 	Texture bg;
 	
@@ -135,7 +136,12 @@ public class LevelOneState extends BasicGameState {
 			   colorEffect = new ColorEffect();
 			   font.getEffects().add(colorEffect);
 			   font.addAsciiGlyphs();
-			   font.loadGlyphs();
+			   font.loadGlyphs();   
+				smallfont = new UnicodeFont (awtFont, 16, false, false);
+				smallfont.getEffects().add(colorEffect);
+				smallfont.addAsciiGlyphs();
+				smallfont.loadGlyphs();
+			   
 		} catch (Exception e) {
 			   e.printStackTrace();
 		}
@@ -381,8 +387,11 @@ public class LevelOneState extends BasicGameState {
 	
 	private void drawText(){
 		Color.white.bind();
-		font.drawString(10, 10, "Ammo: " + smgammo, Color.black);
-		font.drawString(495, 10, "Health: " + man.getHealth(), Color.black);
+		font.drawString(10, 5, "Ammo: " + smgammo, Color.black);
+		font.drawString(495, 5, "Health: " + man.getHealth(), Color.black);
+		font.drawString(230, 30, ("\"The Beginning\""), Color.black);
+		smallfont.drawString(535, 30, "Lives: " + lives, Color.black);
+		smallfont.drawString(30, 30, "Gun: " + man.getGun().toString(), Color.black);
 	}
 	
 	private void reset(){
