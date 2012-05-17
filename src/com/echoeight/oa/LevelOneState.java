@@ -89,7 +89,7 @@ public class LevelOneState extends BasicGameState {
     
     public int lives;
 
-    public MoveableEntity man;
+    public Dude man;
     
     private long getTime() {
             return (Sys.getTime() * 1000) / Sys.getTimerResolution();
@@ -112,6 +112,7 @@ public class LevelOneState extends BasicGameState {
 
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
+		background = new Image("res/menu.png");
 		initGL(WIDTH, HEIGHT);  			 
 		LoadTextures.LoadAll();
 	}
@@ -120,26 +121,13 @@ public class LevelOneState extends BasicGameState {
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 			throws SlickException {
-		 if(worldname.equals("level1")){
+			 arg2.setBackground(Color.lightGray);
 			 availguns.clear();
 			 LevelOne();
-			 availguns.add(Gun.PISTOL);			 
-		 }
-	        man = new Dude(-100, HEIGHT-162, 25, 49);
+			 availguns.add(Gun.PISTOL);
+			 man = new Dude(-100, HEIGHT-162, 25, 49, 100);
 	        
 				Font awtFont = new Font("Arial", Font.BOLD, 24);
-//				try {
-//					InputStream inputStream	= ResourceLoader.getResourceAsStream("res/font.ttf");	 
-//					awtFont = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-//					font = new UnicodeFont(awtFont, 24, false, false);
-//					colorEffect = new ColorEffect();
-//					   font.getEffects().add(colorEffect);
-//					   font.addAsciiGlyphs();
-//					   font.loadGlyphs();
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-				
 		try {
 			InputStream inputStream	= ResourceLoader.getResourceAsStream("res/font.ttf");	 
 			awtFont = Font.createFont(Font.TRUETYPE_FONT, inputStream);
@@ -151,7 +139,7 @@ public class LevelOneState extends BasicGameState {
 		} catch (Exception e) {
 			   e.printStackTrace();
 		}
-		
+		 arg2.drawImage(background, 0, 0);
 	}
 
 	@Override
@@ -170,12 +158,21 @@ public class LevelOneState extends BasicGameState {
 					 onLadder = true;
 				 }
 			 }
-		   	 
+		   	 if(man.getHealth() <= 0){
+		   		 isDead = true;
+		   	 }
 			 if(isDead){
+				 try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				 reset();
 				 man.setX(-100);
 				 man.setY(HEIGHT-162);
+				 man.setHealth(100);
 				 isDead = false;
+				 lives++;
 				 for(Mine min : mines){
 					 if(min.isExploded()){
 						 min.explode(false);
@@ -185,8 +182,7 @@ public class LevelOneState extends BasicGameState {
 			 
 			 intersects(man);
 			 hideMouse();
-			
-             if(isFalling && !(jumping) && !(onLadder)){
+			             if(isFalling && !(jumping) && !(onLadder)){
             	 man.setY(man.getY() + 8);
              }
              if(onLadder){
@@ -244,6 +240,7 @@ public class LevelOneState extends BasicGameState {
             	 }
             	 if(man.intersects(min)){
             		 min.explode(true);
+            		 man.setHealth(0);
             		 isDead = true;
             	 }
             	  for(RedGrenade bul : rgrenades){
@@ -312,10 +309,10 @@ public class LevelOneState extends BasicGameState {
              for(Floor flor : floors){
             	 flor.update(getDelta());
              }
-            // drawBackground();
-             drawAmmo();
+             //drawBackground();
+             drawText();
              Display.update();
-             Display.sync(60);
+             Display.sync(160);
 		}
 		 destroyDisplay();
 	}
@@ -346,11 +343,10 @@ public class LevelOneState extends BasicGameState {
 	        floors.add(new Floor(-100, HEIGHT-240, 292, 8));
 	        floors.add(new Floor(230, HEIGHT-150, 350, 8));
 	        
-	        ladders.add(new Ladder(500, HEIGHT-144, 22, 30));
-	        ladders.add(new Ladder(500, HEIGHT-172, 22, 30));
-	        ladders.add(new Ladder(500, HEIGHT-200, 22, 30));
-	        ladders.add(new Ladder(500, HEIGHT-228, 22, 30));
-	        ladders.add(new Ladder(500, HEIGHT-256, 22, 30));
+	        ladders.add(new Ladder(500, HEIGHT-181, 22, 30));
+	        ladders.add(new Ladder(500, HEIGHT-209, 22, 30));
+	        ladders.add(new Ladder(500, HEIGHT-237, 22, 30));
+	        ladders.add(new Ladder(500, HEIGHT-265, 22, 30));
 	        
 	        mines.add(new Mine(10, HEIGHT-137, 24, 23));
 	        
@@ -382,12 +378,13 @@ public class LevelOneState extends BasicGameState {
 		
 		
 	}
-
-	private void drawAmmo() {
+	
+	private void drawText(){
 		Color.white.bind();
-		font.drawString(100, 100, "Ammo: " + smgammo, Color.black);
+		font.drawString(10, 10, "Ammo: " + smgammo, Color.black);
+		font.drawString(495, 10, "Health: " + man.getHealth(), Color.black);
 	}
-
+	
 	private void reset(){
 		 removeEntities();
 		 availguns.clear();
@@ -426,7 +423,7 @@ public class LevelOneState extends BasicGameState {
 				 }else{
 					 man.setX(man.getX() - 4);
 				 }
-			 }else if(man.intersects(flor) && isFalling){
+			 }else if(man.intersects(flor) && isFalling && man.getY() < flor.getY()){
 				 man.setY(man.getY()-8);
 				 man.setDY(0);
 				 jumping = false;
@@ -631,9 +628,8 @@ public class LevelOneState extends BasicGameState {
      	 for(Ladder lad : ladders){
      		 if(man.intersects(lad)){
      			 man.setDY(0);
-     			 man.setY(man.getY() - 1);
+     			 man.setY(man.getY() - .5);
      			 if(jumping){
- 	            	 man.setDY(0);
  	            	 jumping = false;
      			 }
      		 }
@@ -643,9 +639,8 @@ public class LevelOneState extends BasicGameState {
      	 for(Ladder lad : ladders){
      		 if(man.intersects(lad)){
      			 man.setDY(0);
-     			 man.setY(man.getY() + 2);
+     			 man.setY(man.getY() + 1);
      			 if(jumping){
- 	            	 man.setDY(0);
  	            	 jumping = false;
      			 }
      		 }
@@ -653,17 +648,17 @@ public class LevelOneState extends BasicGameState {
 	     }
       if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
      	 if(!jumping){
-     		 man.setX(man.getX() + 4);
+     		 man.setX(man.getX() + 2);
      	 }else{
-     		 man.setX(man.getX() + 8);
+     		 man.setX(man.getX() + 4);
      	 }
           Dude.manflip = false;
       }
       if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
      	 if(!jumping){
-     		 man.setX(man.getX() - 4);
+     		 man.setX(man.getX() - 2);
      	 }else{
-     		 man.setX(man.getX() - 8);
+     		 man.setX(man.getX() - 4);
      	 }
           Dude.manflip = true;
       }

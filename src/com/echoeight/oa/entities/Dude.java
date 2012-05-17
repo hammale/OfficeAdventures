@@ -8,16 +8,29 @@ import com.echoeight.oa.images.LoadTextures;
 public class Dude extends AbstractMoveableEntity {
     	
 	Texture dude;
+
+	protected int health;
 	
 	public static boolean manflip;
 	public static boolean hasgun; 
 	
+	
+	
 	public static Gun currentGun = Gun.NONE;
 	
-            public Dude(double x, double y, double width, double height) {
+            public Dude(double x, double y, double width, double height, int health) {
                 super(x, y, width, height, Gun.NONE);
+                this.health = health;
             }
-
+            
+            public void setHealth(int health){
+            	this.health = health;
+            }
+            
+            public int getHealth(){
+            	return this.health;
+            }
+            
             @Override
             public void draw(boolean flip) {
             	
