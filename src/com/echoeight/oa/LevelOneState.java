@@ -4,7 +4,6 @@ import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
 
 import java.awt.Font;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -20,12 +19,11 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
-import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.ResourceLoader;
 
+import com.echoeight.oa.entities.BG;
 import com.echoeight.oa.entities.Dude;
 import com.echoeight.oa.entities.Floor;
 import com.echoeight.oa.entities.Ladder;
@@ -50,7 +48,7 @@ public class LevelOneState extends BasicGameState {
 	UnicodeFont font;
 	UnicodeFont smallfont;
 	
-	Texture bg;
+	BG bg;
 	
 	public ArrayList<RedBullet> rbullets = new ArrayList<RedBullet>();
 	public ArrayList<RedGrenade> rgrenades = new ArrayList<RedGrenade>();
@@ -268,7 +266,8 @@ public class LevelOneState extends BasicGameState {
              //draw
              
              cleanUpEntities();
-             
+
+             bg.draw(false);
              for(Tank tank : tanks){
             	 tank.draw(isTankFlipped(tank));
              }
@@ -291,14 +290,14 @@ public class LevelOneState extends BasicGameState {
              }      	 
              for(Mine min : mines){
             	 min.draw(false);
-             }       	
-             
+             }
              //update
              int delta = getDelta();
              
              for(RedBullet bul : rbullets){
             	 bul.update(delta);
              }
+             bg.update(delta);
              for(RedGrenade bul : rgrenades){
             	 bul.update(delta);
              }          
@@ -356,6 +355,7 @@ public class LevelOneState extends BasicGameState {
 	        
 	        mines.add(new Mine(10, HEIGHT-137, 24, 23));
 	        
+	        bg = new BG(-100, -100, 640, 480);
 	        //tanks.add(new Tank(100, HEIGHT-266, 70, 28));
 	}
 
@@ -472,10 +472,10 @@ public class LevelOneState extends BasicGameState {
 	}
 
 	public void cleanUpEntities(){
-   	 for(RedBullet bul : rbulletsrem){
-   		 rbullets.remove(bul);
-   	 }
-   	 rbulletsrem.clear();
+	   	 for(RedBullet bul : rbulletsrem){
+	   		 rbullets.remove(bul);
+	   	 }
+	   	 rbulletsrem.clear();
     	 for(Mine min : minesrem){
     		 mines.remove(min);
     	 }
@@ -787,28 +787,28 @@ public class LevelOneState extends BasicGameState {
       }
 	}
 	
-	public void drawBackground(){
-    	try {
-    		if(bg != null)
-    		GL11.glDeleteTextures(bg.getTextureID());
-    		bg = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/menu.png"));
-    	} catch (IOException e) {
-    		e.printStackTrace();
-    	}
-        bg.bind();
-        GL11.glLoadIdentity();
-        GL11.glTranslated(-100, -100, 0);
-    	GL11.glBegin(GL11.GL_QUADS);
-			GL11.glTexCoord2f(0,0);
-			GL11.glVertex2f(100,100);
-			GL11.glTexCoord2f(1,0);
-			GL11.glVertex2d(640+100,100);
-			GL11.glTexCoord2f(1,1);
-			GL11.glVertex2d(640+100,100+480);
-			GL11.glTexCoord2f(0,1);
-			GL11.glVertex2f(100,100+480);
-		GL11.glEnd();
-		 GL11.glLoadIdentity();
-	}
+//	public void drawBackground(){
+//    	try {
+//    		if(bg != null)
+//    		GL11.glDeleteTextures(bg.getTextureID());
+//    		bg = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/menu.png"));
+//    	} catch (IOException e) {
+//    		e.printStackTrace();
+//    	}
+//        bg.bind();
+//        GL11.glLoadIdentity();
+//        GL11.glTranslated(-100, -100, 0);
+//    	GL11.glBegin(GL11.GL_QUADS);
+//			GL11.glTexCoord2f(0,0);
+//			GL11.glVertex2f(100,100);
+//			GL11.glTexCoord2f(1,0);
+//			GL11.glVertex2d(640+100,100);
+//			GL11.glTexCoord2f(1,1);
+//			GL11.glVertex2d(640+100,100+480);
+//			GL11.glTexCoord2f(0,1);
+//			GL11.glVertex2f(100,100+480);
+//		GL11.glEnd();
+//		 GL11.glLoadIdentity();
+//	}
 	
 }
