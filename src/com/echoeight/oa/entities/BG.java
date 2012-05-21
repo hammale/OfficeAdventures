@@ -8,9 +8,8 @@ import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
 public class BG extends AbstractEntity {
-Texture bg;
 	
-	protected boolean explode = false;
+	Texture bg;
 	
     public BG(double x, double y, double width, double height) {
         super(x, y, width, height);
@@ -18,9 +17,6 @@ Texture bg;
     
     @Override
     public void draw(boolean flip) {
-    	if(bg != null){
-    		return;
-    	}
     	try {
 			//if(bg != null)
 			//GL11.glDeleteTextures(bg.getTextureID());
@@ -45,14 +41,6 @@ Texture bg;
 		 GL11.glLoadIdentity();
 		
     }
-    
-    public boolean isExploded(){
-    	return this.explode;
-    }
-    
-    public void explode(boolean explode){
-    	this.explode = explode;
-	}
 
 	@Override
 	public void update(int delta) {

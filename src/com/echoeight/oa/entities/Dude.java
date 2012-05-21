@@ -32,8 +32,7 @@ public class Dude extends AbstractMoveableEntity {
             }
             
             @Override
-            public void draw(boolean flip) {
-            	
+            public void draw(boolean flip) {           	
             	if(hasgun){
             	       	if(currentGun == Gun.NONE){
             	       		dude = LoadTextures.getDude(manflip, Gun.NONE);
@@ -64,5 +63,22 @@ public class Dude extends AbstractMoveableEntity {
 	    		GL11.glEnd();
 	    		 GL11.glLoadIdentity();
 	    		
+            }
+            
+            @Override
+            public void update(int delta){
+            	if(hasgun){
+        	       	if(currentGun == Gun.NONE){
+        	       		dude = LoadTextures.getDude(manflip, Gun.NONE);
+        	       	}else if(currentGun == Gun.PISTOL){
+        	       		dude = LoadTextures.getDude(manflip, Gun.PISTOL);
+        	       	}else if(currentGun == Gun.SMG){
+        	       		dude = LoadTextures.getDude(manflip, Gun.SMG);
+        	       	}else if(currentGun == Gun.GRENADE){
+        	       		dude = LoadTextures.getDude(manflip, Gun.GRENADE);
+        	       	}
+            	}else{
+            		dude = LoadTextures.getDude(manflip, Gun.NONE);
+            	} 
             }
 }

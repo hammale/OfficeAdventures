@@ -143,13 +143,33 @@ public class LevelOneState extends BasicGameState {
 		} catch (Exception e) {
 			   e.printStackTrace();
 		}
-		 arg2.drawImage(background, 0, 0);
+        bg.draw(false);
+        
+        for(Tank tank : tanks){
+       	 	tank.draw(isTankFlipped(tank));
+        }
+        
+        for(Floor flor : floors){
+       	 flor.draw(false);
+        }
+     	 
+        for(Ladder lad : ladders){
+         	lad.draw(false);
+        }
+        
+        man.draw(Dude.manflip);   	 
+        for(Mine min : mines){
+       	 min.draw(false);
+        }
+		 //arg2.drawImage(background, 0, 0);
 	}
 
 	@Override
 	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 			throws SlickException {
+        
 		 while (!Display.isCloseRequested()) {	
+			 man.draw(Dude.manflip); 
 			 Color.white.bind();
 			 //tankLogic(man);TODO: finish tanks!
 			 handleInput();
@@ -262,35 +282,17 @@ public class LevelOneState extends BasicGameState {
              if(distance <= 46){
                 man.setY(HEIGHT-162);
              }
-                          
+             
              //draw
-             
-             cleanUpEntities();
-
-             bg.draw(false);
-             for(Tank tank : tanks){
-            	 tank.draw(isTankFlipped(tank));
-             }
-             
-             for(Floor flor : floors){
-            	 flor.draw(false);
-             }
-          	 
-             for(Ladder lad : ladders){
-              	lad.draw(false);
-             }
-             
-             man.draw(Dude.manflip);
-
              for(RedBullet bul : rbullets){
-            	 bul.draw(false);
+               	 bul.draw(false);
              }
              for(RedGrenade bul : rgrenades){
-            	 bul.draw(false);
-             }      	 
-             for(Mine min : mines){
-            	 min.draw(false);
-             }
+               	 bul.draw(false);
+             }   
+             
+             cleanUpEntities();
+             
              //update
              int delta = getDelta();
              
@@ -366,8 +368,8 @@ public class LevelOneState extends BasicGameState {
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glDisable(GL11.GL_LIGHTING);                    
  
-		GL11.glClearColor(255f, 255f, 255f, 0f);                
-        GL11.glClearDepth(1);                                       
+		GL11.glClearColor(255f, 255f, 255f, 0f);
+        GL11.glClearDepth(1);                            
  
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
